@@ -12,3 +12,9 @@ class Product(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+
+    def __repr__(self):
+        return f"Category(name={self.name}, description={self.description})"
+
+    def __str__(self):
+        return self.name
