@@ -8,4 +8,7 @@
 <p>Цена: {{ product.price }} ₽</p>
 <hr>
 <p>{{ product.description }}</p>
+<a href="{% url 'store:product_edit' product.id %}">Редактировать</a>
+<a href="{% url 'store:product_delete' product.id %}">Удалить</a>
+<a href="{% url 'store:product_list' %}">Вернуться к списку товаров</a>
 {% endblock %}

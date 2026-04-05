@@ -39,5 +39,7 @@ def product_edit(request, product_id):
 
 def product_delete(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    product.delete()
-    return redirect("store:product_list")
+    if request.method == "POST":
+        product.delete()
+        return redirect("store:product_list")
+    return render(request, "store/product_delete.html", {"product": product})
