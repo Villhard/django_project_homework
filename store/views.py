@@ -1,45 +1,46 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
-from store.models import Product
 from store.forms import ProductForm
+from store.models import Product
 
 
-def product_list(request):
-    products = Product.objects.all()
-    return render(request, "store/product_list.html", {"products": products})
+class ProductListView(ListView):
+    model = Product
+    template_name = "store/product_list.html"
+    context_object_name = "products"
 
 
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    return render(request, "store/product_detail.html", {"product": product})
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "store/product_detail.html"
+    context_object_name = "product"
+    pk_url_kwarg = "product_id"
 
 
-def product_create(request):
-    if request.method == "POST":
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("store:product_list")
-    else:
-        form = ProductForm()
-    return render(request, "store/product_create.html", {"form": form})
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "store/product_create.html"
+    success_url = reverse_lazy("store:product_list")
 
 
-def product_edit(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    if request.method == "POST":
-        form = ProductForm(request.POST, instance=product)
-        if form.is_valid():
-            form.save()
-            return redirect("store:product_list")
-    else:
-        form = ProductForm(instance=product)
-    return render(request, "store/product_edit.html", {"form": form})
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "store/product_edit.html"
+    success_url = reverse_lazy("store:product_list")
+    pk_url_kwarg = "product_id"
 
 
-def product_delete(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    if request.method == "POST":
-        product.delete()
-        return redirect("store:product_list")
-    return render(request, "store/product_delete.html", {"product": product})
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = "store/product_delete.html"
+    success_url = reverse_lazy("store:product_list")
+    pk_url_kwarg = "product_id"

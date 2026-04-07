@@ -8,6 +8,12 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey("Category", on_delete=models.CASCADE, related_name="products")
 
+    def __repr__(self):
+        return f"Product(name={self.name}, description={self.description}, price={self.price}, category={self.category})"
+
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
